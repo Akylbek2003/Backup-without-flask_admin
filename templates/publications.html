@@ -1,0 +1,19 @@
+<!-- templates/publications.html -->
+{% extends 'base.html' %}
+    
+{% block title %}База научных публикаций{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>📚 База научных публикаций</h1>
+    <ul class="list-group mt-3">
+        {% for pub in publications %}
+            <li class="list-group-item">
+                <strong>{{ pub.title }}</strong><br>
+                <em>{{ pub.authors }}</em><br>
+                <a href="{{ url_for('download_document', filename=pub.file_path) }}">Скачать</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Раздел "Хирургам"{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">Раздел "Хирургам"</h1>
+
+    <ul class="list-group mt-3">
+        <li class="list-group-item">
+            <a href="{{ url_for('publications') }}">📚 База научных публикаций</a>
+        </li>
+        <li class="list-group-item">
+            <a href="{{ url_for('events') }}">📅 Календарь мероприятий</a>
+        </li>
+        <li class="list-group-item">
+            <a href="{{ url_for('documents') }}">📄 Документы для специалистов</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+ <!-- templates/documents.html -->
+ {% extends 'base.html' %}
+    
+ {% block title %}Документы для специалистов{% endblock %}
+ 
+ {% block content %}
+ <div class="container mt-4">
+     <h1>📄 Документы для специалистов</h1>
+     <ul class="list-group mt-3">
+         {% for doc in docs %}
+             <li class="list-group-item">
+                 <strong>{{ doc.title }}</strong><br>
+                 <a href="{{ url_for('download_document', filename=doc.filename) }}">Скачать</a>
+             </li>
+         {% endfor %}
+     </ul>
+ </div>
+ {% endblock %}

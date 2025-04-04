@@ -1,0 +1,19 @@
+
+    <!-- templates/events.html -->
+    {% extends 'base.html' %}
+    
+    {% block title %}Календарь мероприятий{% endblock %}
+    
+    {% block content %}
+    <div class="container mt-4">
+        <h1>📅 Календарь мероприятий</h1>
+        <ul class="list-group mt-3">
+            {% for event in events %}
+                <li class="list-group-item">
+                    <strong>{{ event.title }}</strong> - {{ event.date.strftime('%d.%m.%Y') }}<br>
+                    <p>{{ event.description }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endblock %}
