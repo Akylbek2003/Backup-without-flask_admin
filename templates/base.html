@@ -22,10 +22,26 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="/">Главная</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">Об организации</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link" href="{{ url_for('surgeons') }}">Хирургам</a></li> -->
+                        {% if current_user %}
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('surgeons') }}">Хирургам</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Пациентам</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Контакты</a></li>
-                        <li class="nav-item dropdown">
+                        {% endif %}
+                        
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('certified_specialists') }}">Пациентам</a></li>
+                        <!-- <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="patientsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Пациентам
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="patientsDropdown">
+                                <li><a class="dropdown-item" href="{{ url_for('certified_specialists') }}">Сертифицированные специалисты</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('ethics_committee') }}">Решения комитета</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('patient_articles') }}">Статьи</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('implants') }}">Импланты</a></li>
+                            </ul>
+                        </li> -->
+                        
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('contacts') }}">Контакты</a></li>
+                        <!-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                                 Личный кабинет
                             </a>
@@ -33,7 +49,21 @@
                                 <li><a class="dropdown-item" href="/login">Войти</a></li>
                                 <li><a class="dropdown-item" href="/register">Зарегистрироваться</a></li>
                             </ul>
+                        </li> -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                Личный кабинет
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                {% if current_user %}
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Выйти</a></li>
+                                {% else %}
+                                <li><a class="dropdown-item" href="{{ url_for('login') }}">Войти</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('register') }}">Зарегистрироваться</a></li>
+                                {% endif %}
+                            </ul>
                         </li>
+                        
                     </ul>
                 </div>
             </div>

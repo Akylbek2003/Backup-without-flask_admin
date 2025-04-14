@@ -11,7 +11,8 @@
             <li class="list-group-item">
                 <strong>{{ pub.title }}</strong><br>
                 <em>{{ pub.authors }}</em><br>
-                <a href="{{ url_for('download_document', filename=pub.file_path) }}">Скачать</a>
+                <a href="{{ url_for('static', filename='uploads/publications/' ~ pub.file_path) }}" download>Скачать</a>
+
             </li>
         {% endfor %}
     </ul>

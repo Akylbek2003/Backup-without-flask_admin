@@ -2,24 +2,25 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-db = SQLAlchemy()  # Создаём экземпляр, но пока не привязываем к app
+db = SQLAlchemy()
 
-app = Flask(__name__)  
+app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///organization.db'
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.secret_key = 'supersecretkey'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db.init_app(app)  # Теперь привязываем db к app
-migrate = Migrate(app, db)  
+db.init_app(app)
+migrate = Migrate(app, db)
 
-# Импортируем маршруты ПОСЛЕ создания app
-from routes import *
+# Импортируем маршруты
 from views import *
+
+# ✅ ВАЖНО: импорт admin ПЕРЕМЕЩЕН СЮДА
+import admin
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Теперь должно работать без ошибки
+        db.create_all()
     app.run(debug=True)
-

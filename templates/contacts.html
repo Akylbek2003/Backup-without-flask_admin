@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Обратная связь</h2>
+    <form action="{{ url_for('contacts') }}" method="POST" class="mx-auto" style="max-width: 400px;">
+        <div class="mb-2">
+            <label for="name" class="form-label">Имя</label>
+            <input type="text" id="name" name="name" class="form-control form-control-sm" required>
+        </div>
+        <div class="mb-2">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="email" class="form-control form-control-sm" required>
+        </div>
+        <div class="mb-2">
+            <label for="message" class="form-label">Сообщение</label>
+            <textarea id="message" name="message" class="form-control form-control-sm" rows="2" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm w-100">Отправить</button>
+    </form>
+
+    <h3 class="mt-4">Наш офис</h3>
+    <div id="map" style="height: 300px; width: 100%;"></div>
+</div>
+
+<!-- Подключаем Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<script>
+    // Инициализация карты
+    var map = L.map('map').setView([51.1694, 71.2082], 12); // Координаты Нур-Султана
+
+    // Добавляем OpenStreetMap слой карты
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Добавляем маркер на карту
+    var marker = L.marker([51.1694, 71.2082]).addTo(map);
+    marker.bindPopup("<b>Наш офис</b><br>Адрес: Нур-Султан, Казахстан").openPopup();
+</script>
+
+{% endblock %}

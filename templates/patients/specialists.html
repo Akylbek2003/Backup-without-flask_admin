@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+
+    <ul class="nav nav-tabs mb-4">
+      <li class="nav-item">
+        <a class="nav-link {% if request.path == '/patients/specialists' %}active{% endif %}" href="{{ url_for('certified_specialists') }}">Специалисты</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if request.path == '/patients/implants' %}active{% endif %}" href="{{ url_for('implants') }}">Импланты</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if request.path == '/patients/articles' %}active{% endif %}" href="{{ url_for('patient_articles') }}">Статьи</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if request.path == '/patients/ethics' %}active{% endif %}" href="{{ url_for('ethics_committee') }}">Этика</a>
+      </li>
+    </ul>
+
+    <h2>Сертифицированные специалисты</h2>
+
+<form method="get" action="{{ url_for('certified_specialists') }}" class="mb-3">
+    <div class="row g-2">
+        <div class="col-md-4">
+            <input type="text" name="query" class="form-control" placeholder="Поиск по имени или специальности" value="{{ query }}">
+        </div>
+        <div class="col-md-3">
+            <select name="specialty" class="form-select">
+                <option value="">Все специальности</option>
+                {% for s in all_specialties %}
+                    <option value="{{ s }}" {% if s == selected_specialty %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select name="region" class="form-select">
+                <option value="">Все регионы</option>
+                {% for r in all_regions %}
+                    <option value="{{ r }}" {% if r == selected_region %}selected{% endif %}>{{ r }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Фильтр</button>
+        </div>
+    </div>
+</form>
+
+{% if specialists %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Специальность</th>
+                <th>Регион</th>
+                <th>Дата сертификации</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for specialist in specialists %}
+            <tr>
+                <td>{{ specialist.name }}</td>
+                <td>{{ specialist.specialty }}</td>
+                <td>{{ specialist.region or '-' }}</td>
+                <td>{{ specialist.certification_date.strftime('%d.%m.%Y') if specialist.certification_date else '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Нет данных.</p>
+{% endif %}
+
+</div>
+{% endblock %}

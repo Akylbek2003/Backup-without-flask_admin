@@ -1,49 +1,73 @@
 {% extends 'base.html' %}
-
 {% block title %}Об организации{% endblock %}
-
 {% block content %}
+
 <div class="container mt-5">
     <h1 class="mb-4">Об организации</h1>
 
-    <h2>Структура организации</h2>
-    <p>Здесь можно разместить информацию о структуре и истории организации.</p>
-
-    <h2>Список членов общества</h2>
-    <form method="GET" action="{{ url_for('search_members') }}" class="mb-3">
-        <input type="text" name="query" class="form-control" placeholder="Введите имя для поиска">
-        <button type="submit" class="btn btn-primary mt-2">Поиск</button>
-    </form>
-    <ul class="list-group">
-        {% for member in members %}
-            <li class="list-group-item">{{ member.name }} - {{ member.role }}</li>
-        {% endfor %}
+    <ul class="nav nav-tabs" id="aboutTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="structure-tab" data-bs-toggle="tab" href="#structure" role="tab">Структура</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="members-tab" data-bs-toggle="tab" href="#members" role="tab">Члены общества</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="docs-tab" data-bs-toggle="tab" href="#docs" role="tab">Документы</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="applications-tab" data-bs-toggle="tab" href="#applications" role="tab">Заявки</a>
+        </li>
     </ul>
 
-    <h2 class="mt-4">Документы</h2>
-    <ul class="list-group">
-        {% for doc in documents %}
-            <li class="list-group-item">
-                <a href="{{ url_for('download_document', filename=doc.filename) }}" download>
-                    {{ doc.title if doc.title else doc.filename }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="tab-content mt-3" id="aboutTabsContent">
+        <div class="tab-pane fade show active" id="structure" role="tabpanel">
+            <h2>Структура организации</h2>
+            <p>Здесь можно разместить информацию о структуре и истории организации.</p>
+        </div>
 
+        <div class="tab-pane fade" id="members" role="tabpanel">
+            <h2>Список членов общества</h2>
+            <form method="GET" action="{{ url_for('search_members') }}" class="mb-3">
+                <input type="text" name="query" class="form-control" placeholder="Введите имя для поиска">
+                <button type="submit" class="btn btn-primary mt-2">Поиск</button>
+            </form>
+            <ul class="list-group">
+                {% for member in members %}
+                    <li class="list-group-item">{{ member.name }} - {{ member.role }}</li>
+                {% endfor %}
+            </ul>
+        </div>
 
-    <h2 class="mt-4">Подать заявку на вступление</h2>
-    <form method="POST" action="{{ url_for('apply_membership') }}">
-        <input type="text" name="name" class="form-control mb-2" placeholder="Ваше имя" required>
-        <input type="email" name="email" class="form-control mb-2" placeholder="Ваш email" required>
-        <button type="submit" class="btn btn-success">Отправить заявку</button>
-    </form>
+        <div class="tab-pane fade" id="docs" role="tabpanel">
+            <h2>Документы</h2>
+            <ul class="list-group">
+                {% for doc in documents %}
+                    <li class="list-group-item">
+                        <a href="{{ url_for('download_document', filename=doc.filename) }}" download>
+                            {{ doc.title if doc.title else doc.filename }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
 
-    <h2 class="mt-4">Заявка на аккредитацию мероприятия</h2>
-    <form method="POST" action="{{ url_for('apply_event_accreditation') }}">
-        <input type="text" name="event_name" class="form-control mb-2" placeholder="Название мероприятия" required>
-        <input type="date" name="event_date" class="form-control mb-2" required>
-        <button type="submit" class="btn btn-success">Отправить заявку</button>
-    </form>
+        <div class="tab-pane fade" id="applications" role="tabpanel">
+            <h2>Заявка на вступление</h2>
+            <form method="POST" action="{{ url_for('apply_membership') }}">
+                <input type="text" name="name" class="form-control mb-2" placeholder="Ваше имя" required>
+                <input type="email" name="email" class="form-control mb-2" placeholder="Ваш email" required>
+                <button type="submit" class="btn btn-success">Отправить заявку</button>
+            </form>
+
+            <h2 class="mt-4">Заявка на аккредитацию мероприятия</h2>
+            <form method="POST" action="{{ url_for('apply_event_accreditation') }}">
+                <input type="text" name="event_name" class="form-control mb-2" placeholder="Название мероприятия" required>
+                <input type="date" name="event_date" class="form-control mb-2" required>
+                <button type="submit" class="btn btn-success">Отправить заявку</button>
+            </form>
+        </div>
+    </div>
 </div>
+
 {% endblock %}

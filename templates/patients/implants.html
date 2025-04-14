@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/patients/specialists' %}active{% endif %}" href="{{ url_for('certified_specialists') }}">Специалисты</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/patients/implants' %}active{% endif %}" href="{{ url_for('implants') }}">Импланты</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/patients/articles' %}active{% endif %}" href="{{ url_for('patient_articles') }}">Статьи</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/patients/ethics' %}active{% endif %}" href="{{ url_for('ethics_committee') }}">Этика</a>
+        </li>
+      </ul>
+      
+    <h2>Импланты</h2>
+    {% if implants %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Производитель</th>
+                    <th>Сертификат</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for implant in implants %}
+                <tr>
+                    <td>{{ implant.name }}</td>
+                    <td>{{ implant.manufacturer }}</td>
+                    <td>{{ implant.certification_number }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Нет информации об имплантах.</p>
+    {% endif %}
+</div>
+{% endblock %}
