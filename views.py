@@ -1,18 +1,23 @@
-from flask import render_template, request, redirect, url_for, send_from_directory, flash
+from flask import session, render_template, request, redirect, url_for, send_from_directory, flash
 from app import app, db
 from models import Member, Document, Publication, Event, Review  # Импортируем модели
-
-from models import MembershipApplication, EventAccreditation
 from datetime import datetime  # уже импортирован, если нет — добавь
-from models import CertifiedSpecialist, Implant, Article, EthicsDecision
+from models import MembershipApplication, EventAccreditation, CertifiedSpecialist, Implant, Article, EthicsDecision, User, SliderItem, NewsItem
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_user, login_required, logout_user, current_user
+import os
+from werkzeug.utils import secure_filename
+# Путь для сохранения аватарок
+AVATAR_FOLDER = os.path.join('static', 'uploads', 'avatars')
+app.config['AVATAR_FOLDER'] = AVATAR_FOLDER
+os.makedirs(AVATAR_FOLDER, exist_ok=True)
 
-
-from models import User
-from flask import session
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    slider_items = SliderItem.query.all()
+    return render_template('index.html', slider_items=slider_items)
+
     
 # Страница "Об организации"
 @app.route('/about')
@@ -196,41 +201,76 @@ def implants():
 
 #flask-login
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+@app.route('/sign_up', methods=['GET', 'POST'])
+def sign_up():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        if User.query.filter_by(email=email).first():
-            flash('Пользователь уже существует', 'danger')
+        email = request.form.get('email')
+        first_name = request.form.get('firstName')
+        password1 = request.form.get('password1')
+        password2 = request.form.get('password2')
+
+        user = User.query.filter_by(email=email).first()
+        if user:
+            flash('Почта уже используется', category='error')
+
+        elif len(email) < 4:
+            flash('Email must be greater than 4 characters.', category='error')
+            
+        elif len(first_name) < 2:
+            flash('First name must be greater than 1 characters.', category='error')    
+            
+        elif password1 != password2:
+            flash('Passwords don\'t match.', category='error')
+            
+        elif len(password1) < 7:
+            flash('Password must be at least 7 characters.', category='error')
+           
         else:
-            user = User(email=email)
-            user.set_password(password)
-            db.session.add(user)
+            new_user = User(email=email, first_name=first_name, password_hash=generate_password_hash(password1, method='pbkdf2:sha256'))
+            db.session.add(new_user)
             db.session.commit()
-            flash('Вы успешно зарегистрировались!', 'success')
-            return redirect(url_for('login'))
-    return render_template('register.html')
+            # login_user(user, remember=True)
+            flash('Регистрация прошла успешно', category='success')
+            return redirect(url_for('index'))
+
+    return render_template("sign_up.html", user=current_user)
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form.get('email')
+        password = request.form.get('password')
+
         user = User.query.filter_by(email=email).first()
-        if user and user.check_password(password):
-            session['user_id'] = user.id
-            flash('Вы вошли в систему!', 'success')
-            return redirect(url_for('index'))
-        else:
-            flash('Неверный логин или пароль', 'danger')
-    return render_template('login.html')
+
+        if user:
+            if user.check_password(password):
+                flash('Login in successfully!', category='success') 
+                login_user(user, remember=True)
+                return redirect(url_for('index'))
+            else:
+                flash('Неправильный пароль, попробуйте еще раз', category='error')
+    
+        print(f"Пробуем войти с email={email} и password={password}")
+        if user:
+            print(f"Пользователь найден: {user.email}")
+            if user.check_password(password):
+                print("Пароль верный, логиним пользователя")
+                login_user(user, remember=True)
+                return redirect(url_for('index'))
+            else:
+                print("Неверный пароль")
+
+    return render_template("login.html", user=current_user)
+
 
 
 @app.route('/logout')
+@login_required
 def logout():
-    session.pop('user_id', None)
+    logout_user()
     flash('Вы вышли из системы', 'info')
     return redirect(url_for('index'))
 
@@ -238,10 +278,8 @@ def logout():
 # Контекстный процессор — добавляет переменные во все шаблоны
 @app.context_processor
 def inject_user():
-    user = None
-    if 'user_id' in session:
-        user = User.query.get(session['user_id'])
-    return dict(current_user=user)
+    return dict(current_user=current_user)
+
 
 from flask import jsonify
 from models import ContactMessage  # добавим модель
@@ -263,3 +301,39 @@ def contacts():
             flash('Пожалуйста, заполните все поля', 'danger')
 
     return render_template('contacts.html')
+
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    if request.method == 'POST':
+        avatar_file = request.files.get('avatar')
+        if avatar_file:
+            filename = secure_filename(avatar_file.filename)
+            avatar_path = os.path.join(app.config['AVATAR_FOLDER'], filename)
+            avatar_file.save(avatar_path)
+
+            current_user.avatar = filename
+            db.session.commit()
+            flash("Аватар обновлён!", "success")
+            return redirect(url_for('profile'))
+
+    return render_template('profile.html', user=current_user)
+
+@app.route('/upload_signed_form', methods=['POST'])
+def upload_signed_form():
+    file = request.files.get('signed_form')
+    if file:
+        filename = secure_filename(file.filename)
+        save_path = os.path.join('uploads', 'signed_forms', filename)
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        file.save(save_path)
+        flash('Файл успешно загружен!', 'success')
+    else:
+        flash('Файл не был выбран', 'danger')
+    return redirect(url_for('about'))
+
+@app.route('/news/<slug>')
+def news_detail(slug):
+    news = NewsItem.query.filter_by(slug=slug).first_or_404()
+    return render_template('news_detail.html', news=news)
+    

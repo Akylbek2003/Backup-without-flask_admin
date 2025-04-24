@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+    <!-- Слайдер -->
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"></button>
+        </div>
+        
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{{ url_for('static', filename='img/img1.jpg') }}" class="d-block w-100" alt="Слайд 1">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Слайд 1</h5>
+                    <p>Описание первого слайда, можно добавить больше текста.</p>
+                </div>
+            </div>
+            
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='img/img1.jpg') }}" class="d-block w-100" alt="Слайд 2">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Слайд 2</h5>
+                    <p>Описание второго слайда, меняется вместе с картинкой.</p>
+                </div>
+            </div>
+            
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='img/img1.jpg') }}" class="d-block w-100" alt="Слайд 3">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Слайд 3</h5>
+                    <p>Описание третьего слайда, синхронизированное с изображением.</p>
+                </div>
+            </div>
+        </div>
+        
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+
+    <!-- Контентные блоки
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Об организации</h5>
+                        <p class="card-text">Информация о структуре организации, список членов, документы.</p>
+                        <a href="#" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Хирургам</h5>
+                        <p class="card-text">База научных публикаций, календарь мероприятий, рецензирование статей.</p>
+                        <a href="#" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Пациентам</h5>
+                        <p class="card-text">Список сертифицированных специалистов, полезные статьи, каталог имплантатов.</p>
+                        <a href="#" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div> -->
+            <!-- <div class="container mt-4">
+                <h2>Пациентам</h2>
+                <ul>
+                    <li><a href="{{ url_for('certified_specialists') }}">Список сертифицированных специалистов</a></li>
+                    <li><a href="{{ url_for('ethics_committee') }}">Этический комитет</a></li>
+                    <li><a href="{{ url_for('patient_articles') }}">Полезные статьи</a></li>
+                    <li><a href="{{ url_for('implants') }}">Каталог имплантатов</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Контакты</h5>
+                        <p class="card-text">Форма обратной связи и карта с местоположением.</p>
+                        <a href="#" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Личный кабинет</h5>
+                        <p class="card-text">Регистрация, авторизация, просмотр профиля и участия в мероприятиях.</p>
+                        <a href="#" class="btn btn-primary">Войти</a>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    <!-- </div> -->
+{% endblock %}

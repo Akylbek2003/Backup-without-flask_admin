@@ -1,6 +1,8 @@
 from app import db  # Используем db из app.py
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from flask_login import UserMixin
+from sqlalchemy import ForeignKey
 
 class Member(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -74,10 +76,13 @@ class Implant(db.Model):
     certification_number = db.Column(db.String(100), nullable=False)
 
 #flask-login
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    name = db.Column(db.String(100), nullable=True)  # Для отображения имени пользователя
+    first_name = db.Column(db.String(150))
+    avatar = db.Column(db.String(100), nullable=True, default='default_avatar.png')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -91,3 +96,29 @@ class ContactMessage(db.Model):
     email = db.Column(db.String(120), nullable=False)
     message = db.Column(db.Text, nullable=False)
     sent_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class NewsItem(db.Model):
+    __tablename__ = 'news'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    slug = db.Column(db.String(100), unique=True)  # будет использоваться в ссылке
+    content = db.Column(db.Text)
+    file_path = db.Column(db.String(200))  # путь к изображению
+
+    def __repr__(self):
+        return self.title or f'News #{self.id}'
+
+
+# Обновим SliderItem, добавив связь с новостью
+class SliderItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    description = db.Column(db.Text)
+    file_path = db.Column(db.String(200))
+
+    news_id = db.Column(db.Integer, db.ForeignKey('news.id'))
+    news = db.relationship('NewsItem', backref='sliders')
+
+    def __repr__(self):
+        return self.title or f'Slider #{self.id}'

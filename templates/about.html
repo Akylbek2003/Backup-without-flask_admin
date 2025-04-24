@@ -5,23 +5,25 @@
 <div class="container mt-5">
     <h1 class="mb-4">Об организации</h1>
 
+    <!-- ✅ Bootstrap 3/4: используем data-toggle вместо data-bs-toggle -->
     <ul class="nav nav-tabs" id="aboutTabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="structure-tab" data-bs-toggle="tab" href="#structure" role="tab">Структура</a>
+        <li class="nav-item active">
+            <a class="nav-link" id="structure-tab" data-toggle="tab" href="#structure" role="tab">Структура</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="members-tab" data-bs-toggle="tab" href="#members" role="tab">Члены общества</a>
+            <a class="nav-link" id="members-tab" data-toggle="tab" href="#members" role="tab">Члены общества</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="docs-tab" data-bs-toggle="tab" href="#docs" role="tab">Документы</a>
+            <a class="nav-link" id="docs-tab" data-toggle="tab" href="#docs" role="tab">Документы</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="applications-tab" data-bs-toggle="tab" href="#applications" role="tab">Заявки</a>
+            <a class="nav-link" id="applications-tab" data-toggle="tab" href="#applications" role="tab">Заявки</a>
         </li>
     </ul>
 
     <div class="tab-content mt-3" id="aboutTabsContent">
-        <div class="tab-pane fade show active" id="structure" role="tabpanel">
+        <!-- ✅ первая вкладка должна быть .active -->
+        <div class="tab-pane fade in active" id="structure" role="tabpanel">
             <h2>Структура организации</h2>
             <p>Здесь можно разместить информацию о структуре и истории организации.</p>
         </div>
@@ -54,10 +56,28 @@
 
         <div class="tab-pane fade" id="applications" role="tabpanel">
             <h2>Заявка на вступление</h2>
+            <!-- ✅ Обязательно method="POST" и правильный action -->
             <form method="POST" action="{{ url_for('apply_membership') }}">
                 <input type="text" name="name" class="form-control mb-2" placeholder="Ваше имя" required>
                 <input type="email" name="email" class="form-control mb-2" placeholder="Ваш email" required>
                 <button type="submit" class="btn btn-success">Отправить заявку</button>
+                <!-- Форма для загрузки  -->
+                <p class="mt-3">
+                    После отправки, пожалуйста, <strong>скачайте и заполните</strong> заявление:
+                    <a href="{{ url_for('static', filename='uploads/docs/form.docx') }}" target="_blank" class="btn btn-info btn-sm">
+                        Скачать шаблон заявления
+                    </a>
+                </p>
+                <!-- форма для загрузки заполненного документа -->
+                <form method="POST" action="{{ url_for('upload_signed_form') }}" enctype="multipart/form-data">
+                    <label>Загрузите подписанный документ:</label>
+                    <input type="file" name="signed_form" accept=".pdf,.jpg,.jpeg,.png" class="form-control mb-2" required>
+                    <div>
+                        <h1> </h1>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </form>
+                
             </form>
 
             <h2 class="mt-4">Заявка на аккредитацию мероприятия</h2>

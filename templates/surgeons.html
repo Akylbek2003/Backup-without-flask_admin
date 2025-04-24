@@ -6,21 +6,16 @@
 <div class="container mt-5">
     <h1 class="mb-4">Раздел "Хирургам"</h1>
 
-    <ul class="nav nav-tabs" id="surgeonsTabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="publications-tab" data-bs-toggle="tab" href="#publications" role="tab">Публикации</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="events-tab" data-bs-toggle="tab" href="#events" role="tab">Мероприятия</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="docs-tab" data-bs-toggle="tab" href="#docs" role="tab">Документы</a>
-        </li>
+    <!-- Вкладки -->
+    <ul class="nav nav-tabs" id="surgeonsTabs">
+        <li class="active"><a href="#publications" data-toggle="tab">Публикации</a></li>
+        <li><a href="#events" data-toggle="tab">Мероприятия</a></li>
+        <li><a href="#docs" data-toggle="tab">Документы</a></li>
     </ul>
 
     <div class="tab-content mt-3" id="surgeonsTabsContent">
 
-        <div class="tab-pane fade show active" id="publications" role="tabpanel">
+        <div class="tab-pane fade in active" id="publications">
             <h2>База научных публикаций</h2>
             <ul class="list-group mt-3">
                 {% for pub in publications %}
@@ -33,7 +28,7 @@
             </ul>
         </div>
 
-        <div class="tab-pane fade" id="events" role="tabpanel">
+        <div class="tab-pane fade" id="events">
             <h2>Календарь мероприятий</h2>
             <ul class="list-group">
                 {% for event in events %}
@@ -47,7 +42,7 @@
             </ul>
         </div>
 
-        <div class="tab-pane fade" id="docs" role="tabpanel">
+        <div class="tab-pane fade" id="docs">
             <h2>Документы для специалистов</h2>
             <ul class="list-group">
                 {% for doc in documents %}

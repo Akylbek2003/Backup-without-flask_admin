@@ -1,0 +1,10 @@
+{% extends "base.html" %} 
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+
+<h1>{{ news.title }}</h1>
+<img src="{{ url_for('static', filename='uploads/news/' ~ news.file_path) }}" alt="Фото" style="max-width: 100%;">
+<p>{{ news.content|safe }}</p>
+
+{% endblock %}

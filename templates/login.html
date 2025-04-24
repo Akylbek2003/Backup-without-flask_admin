@@ -1,18 +1,29 @@
-{% extends 'base.html' %}
+{% extends "base.html" %} 
 {% block title %}Вход{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
-    <h2>Вход</h2>
-    <form method="post">
-        <div class="mb-3">
-            <label for="email">Email</label>
-            <input type="email" name="email" required class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="password">Пароль</label>
-            <input type="password" name="password" required class="form-control">
-        </div>
-        <button type="submit" class="btn btn-success">Войти</button>
-    </form>
-</div>
+<form method="POST">
+    <h3 align="center">Вход</h3>
+    <div class="form-group">
+        <label for="email">Адрес электронной почты</label>
+        <input type="email" 
+        class="form-control" 
+        id="email" 
+        name="email" 
+        placeholder="Введите адрес электронной почты"
+        />
+    </div>
+    <div class="form-group">
+        <label for="password">Пароль</label>
+        <input 
+        type="password" 
+        class="form-control" 
+        id="password" 
+        name="password" 
+        placeholder="Введите пароль"
+        />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Войти</button>
+</form>
 {% endblock %}

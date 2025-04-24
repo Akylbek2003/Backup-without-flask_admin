@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Профиль пользователя</h2>
+
+    <div class="mb-4">
+        <img src="{{ url_for('static', filename='uploads/avatars/' + (user.avatar or 'default_avatar.png')) }}"
+             alt="Avatar" class="img-thumbnail" width="150">
+    </div>
+
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Имя:</strong> {{ user.first_name }}</p>
+
+    <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="avatar" class="form-label">Загрузить новый аватар</label>
+            <input class="form-control" type="file" name="avatar" id="avatar" accept="image/*">
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+{% endblock %}
